@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How to Protect Your Folders and Files from Ransomware Attacks</title>
+<meta content="Learn how to protect your folders from ransomware encryption. A complete guide to Windows Controlled Folder Access, anti-ransomware software, and file recovery." name="description"/>
+<!-- Replace YOUR-DOMAIN.com before launch -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;900&amp;family=Archivo+Black&amp;family=Lato:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+    --color-hero-bg: #1A0533;
+    --color-primary-accent: #FF6B6B;
+    --color-secondary-accent: #FFD93D;
+    --gradient-a: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    --gradient-b: linear-gradient(135deg, #4ECDC4 0%, #44CF6C 100%);
+    --color-content-bg: #FAFAFA;
+    --color-body-text: #2D2D2D;
+    --color-heading-text: #17121f;
+    --color-border: rgba(26, 5, 51, 0.15);
+    --color-meta-text: #6e6476;
+    --color-saas-bg: #1A0533;
+    --color-saas-text: #ffffff;
+    --font-heading: 'Archivo Black', 'Archivo', sans-serif;
+    --font-subheading: 'Archivo', sans-serif;
+    --font-body: 'Lato', sans-serif;
+    --max-reading-width: 820px;
+    --max-wide-width: 1180px;
+    --section-padding-v: 92px;
+    --radius-card: 22px;
+    --shadow-card: 0 20px 55px rgba(26, 5, 51, 0.14);
+    --transition-speed: 0.28s;
+}
+
+/* Reset & Base */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font-body);
+    color: var(--color-body-text);
+    background-color: var(--color-content-bg);
+    line-height: 1.75;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(120deg, rgba(255,107,107,0.06) 0 12%, transparent 12% 100%),
+        linear-gradient(300deg, rgba(78,205,196,0.06) 0 10%, transparent 10% 100%);
+    z-index: -1;
+}
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    color: var(--color-heading-text);
+    line-height: 1.02;
+    margin-bottom: 1rem;
+    letter-spacing: -0.04em;
+}
+h1, h2 { text-transform: uppercase; }
+h2 {
+    position: relative;
+    display: inline-block;
+    font-size: clamp(2rem, 5vw, 42px);
+    padding-bottom: 16px;
+}
+h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: min(180px, 55%);
+    height: 8px;
+    background: var(--gradient-a);
+    clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+}
+h3, h4, .nav-links a, .btn-outline, .btn-filled, .saas-btn-outline, .chip, .toggle-btn, .sim-tab {
+    font-family: var(--font-subheading);
+}
+p { margin-bottom: 1.5rem; }
+a { color: var(--color-primary-accent); text-decoration: none; transition: all var(--transition-speed); font-weight: 700; }
+a:hover { text-decoration: none; color: #ff8e53; }
+img { max-width: 100%; height: auto; border-radius: var(--radius-card); display: block; object-fit: contain; }
+ul, ol { margin-bottom: 1.5rem; padding-left: 1.5rem; }
+li { margin-bottom: 0.5rem; }
+code {
+    background: rgba(26, 5, 51, 0.08);
+    color: #1A0533;
+    padding: 0.12em 0.35em;
+    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+::selection { background: var(--color-secondary-accent); color: #1A0533; }
+
+/* Structural Classes */
+.container-reading { max-width: var(--max-reading-width); margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+.container-wide { max-width: var(--max-wide-width); margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+.section {
+    position: relative;
+    padding: var(--section-padding-v) 0;
+    background: var(--color-content-bg);
+    clip-path: polygon(0 0, 100% 3%, 100% 97%, 0 100%);
+}
+.section:nth-of-type(even) { clip-path: polygon(0 3%, 100% 0, 100% 100%, 0 97%); }
+.section-alt {
+    background:
+        radial-gradient(circle at 10% 8%, rgba(255, 217, 61, 0.18), transparent 32%),
+        radial-gradient(circle at 90% 95%, rgba(78, 205, 196, 0.16), transparent 30%),
+        #fff7d1;
+}
+.section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background:
+      linear-gradient(135deg, transparent 0 72%, rgba(255,107,107,0.08) 72% 76%, transparent 76%),
+      linear-gradient(45deg, transparent 0 82%, rgba(78,205,196,0.10) 82% 86%, transparent 86%);
+}
+.content-image {
+    margin: 32px 0;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 28px;
+    padding: 16px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transform: rotate(-0.8deg);
+}
+.content-image:nth-of-type(even) { transform: rotate(0.8deg); }
+.content-image img {
+    width: 100%;
+    max-height: 520px;
+    margin: 0 auto;
+}
+
+/* Header & Nav */
+header {
+    position: sticky;
+    top: 0;
+    background: rgba(26, 5, 51, 0.94);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    z-index: 100;
+    padding: 14px 24px;
+    backdrop-filter: blur(16px);
+}
+.nav-container {
+    max-width: var(--max-wide-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+}
+.site-brand, .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+.brand-wordmark {
+    display: inline-block;
+    white-space: nowrap;
+    word-spacing: 0.14em;
+    letter-spacing: 0.01em;
+}
+.brand-mark {
+    width: 40px;
+    height: 40px;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 40px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, rgba(255,107,107,0.22), rgba(255,217,61,0.10));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 8px 24px rgba(255,107,107,0.18);
+}
+.brand-mark svg { width: 28px; height: 28px; }
+.mark-shield { fill: url(#brandGradient); fill: #FF6B6B; }
+.mark-cut { stroke: #FFD93D; stroke-width: 3; stroke-linecap: round; fill: none; }
+.nav-links { display: flex; gap: 24px; align-items: center; }
+.nav-links a { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.82); text-transform: uppercase; letter-spacing: 0.03em; }
+.nav-links a:hover { color: var(--color-secondary-accent); transform: translateY(-1px); }
+.btn-outline {
+    display: inline-block;
+    padding: 10px 18px;
+    border: 2px solid var(--color-secondary-accent);
+    background-color: transparent;
+    color: var(--color-secondary-accent) !important;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+}
+.btn-outline:hover { background-color: var(--color-secondary-accent); color: #1A0533 !important; text-decoration: none; }
+.btn-filled {
+    display: inline-block;
+    padding: 13px 24px;
+    background: var(--gradient-a);
+    color: #fff !important;
+    border-radius: 999px;
+    font-weight: 800;
+    border: 0;
+    box-shadow: 0 14px 34px rgba(255,107,107,0.35);
+}
+.btn-filled:hover { transform: translateY(-2px); box-shadow: 0 20px 42px rgba(255,107,107,0.42); color: #fff !important; }
+.mobile-toggle { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--color-secondary-accent); }
+
+/* Hero Editorial */
+.hero-editorial {
+    position: relative;
+    isolation: isolate;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,217,61,0.18), transparent 25%),
+      radial-gradient(circle at 86% 65%, rgba(78,205,196,0.18), transparent 26%),
+      var(--color-hero-bg);
+    padding: 96px 0 82px;
+    overflow: hidden;
+    color: #fff;
+}
+.hero-editorial::before,
+.hero-editorial::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 42vw;
+    aspect-ratio: 1 / 1;
+    pointer-events: none;
+    animation: triangleRotate 40s ease-in-out infinite alternate;
+}
+.hero-editorial::before {
+    top: -12vw;
+    right: -9vw;
+    background: var(--gradient-a);
+    clip-path: polygon(0 0, 100% 18%, 62% 100%);
+    opacity: 0.92;
+    transform-origin: 50% 50%;
+}
+.hero-editorial::after {
+    left: -14vw;
+    bottom: -16vw;
+    background: linear-gradient(135deg, #FFD93D, #FFB000);
+    clip-path: polygon(50% 0, 100% 100%, 0 82%);
+    opacity: 0.92;
+    animation-direction: alternate-reverse;
+}
+@keyframes triangleRotate {
+    0% { transform: rotate(-2.5deg) scale(1); }
+    100% { transform: rotate(2.5deg) scale(1.02); }
+}
+.breadcrumb { font-size: 13px; color: var(--color-secondary-accent); margin-bottom: 24px; display: block; font-weight: 900; text-transform: uppercase; letter-spacing: 0.14em; }
+.hero-editorial h1 {
+    font-size: clamp(44px, 8vw, 72px);
+    margin-bottom: 24px;
+    color: #fff;
+    text-shadow: 0 16px 60px rgba(0,0,0,0.28);
+    max-width: 930px;
+}
+.hero-editorial h1::first-letter {
+    background: var(--gradient-a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.hero-intro { font-size: 1.2rem; color: rgba(255,255,255,0.86); margin-bottom: 24px; max-width: 760px; }
+.meta-bar { font-size: 14px; color: rgba(255,255,255,0.72); display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; align-items: center; }
+.quick-answer {
+    position: relative;
+    background: rgba(255,255,255,0.10);
+    border-left: 0;
+    border-top: 6px solid var(--color-secondary-accent);
+    padding: 28px;
+    border-radius: 26px;
+    margin-bottom: 32px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14), 0 20px 60px rgba(0,0,0,0.18);
+    backdrop-filter: blur(10px);
+}
+.quick-answer::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 118px;
+    height: 72px;
+    background: var(--gradient-a);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    opacity: 0.5;
+    border-radius: 22px 0 0 0;
+}
+.quick-answer .label { position: relative; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; color: var(--color-secondary-accent); margin-bottom: 8px; display: block; }
+.quick-answer p { position: relative; color: rgba(255,255,255,0.88); margin-bottom: 0; }
+.hero-visual {
+    transform: rotate(1.2deg);
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+}
+.scroll-indicator {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin: 30px auto 0;
+    border: 2px solid var(--color-secondary-accent);
+    border-radius: 999px;
+    color: var(--color-secondary-accent);
+    font-size: 30px;
+    line-height: 1;
+    animation: bounceDown 1.7s infinite ease-in-out;
+}
+@keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+}
+
+/* Components */
+.toc-card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 28px;
+    padding: 26px;
+    margin-bottom: 56px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+}
+.toc-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 42%;
+    height: 10px;
+    background: var(--gradient-b);
+    clip-path: polygon(0 0, 100% 0, 94% 100%, 0 100%);
+}
+.toc-card h3 { font-size: 1.125rem; margin-bottom: 16px; text-transform: uppercase; }
+.toc-card ul { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 28px; }
+.toc-card li { margin-bottom: 12px; break-inside: avoid; }
+.toc-card a { font-weight: 800; color: var(--color-heading-text); border-bottom: 2px solid transparent; }
+.toc-card a:hover { color: var(--color-primary-accent); border-bottom-color: var(--color-primary-accent); }
+
+/* Interactive: Attack Simulation Tabs */
+.sim-container {
+    background: #fff;
+    border-radius: 30px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    margin: 38px 0;
+    border: 1px solid var(--color-border);
+    transform: rotate(-0.4deg);
+}
+.sim-tabs { display: flex; border-bottom: 1px solid var(--color-border); }
+.sim-tab {
+    flex: 1;
+    padding: 16px;
+    text-align: center;
+    font-weight: 900;
+    cursor: pointer;
+    background: #fff;
+    border: none;
+    color: var(--color-meta-text);
+    transition: all 0.2s;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+.sim-tab.active { background: var(--gradient-a); color: #fff; }
+.sim-content { padding: 34px; display: none; }
+.sim-content.active { display: block; animation: fadeUp 0.5s ease both; }
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Method cards */
+.toggle-wrapper {
+    display: inline-flex;
+    background: #fff;
+    border-radius: 999px;
+    padding: 6px;
+    margin: 8px 0 28px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 12px 26px rgba(26, 5, 51, 0.08);
+}
+.toggle-btn {
+    padding: 10px 22px;
+    border: none;
+    background: transparent;
+    font-weight: 900;
+    font-size: 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: var(--color-meta-text);
+}
+.toggle-btn.active { background: var(--gradient-a); color: #fff; box-shadow: 0 12px 26px rgba(255,107,107,0.28); }
+.method-flip-card {
+    perspective: 1600px;
+    min-height: 640px;
+    cursor: pointer;
+    margin-top: 20px;
+    outline: none;
+}
+.method-flip-inner {
+    position: relative;
+    min-height: 640px;
+    transition: transform 0.75s cubic-bezier(.2,.7,.2,1);
+    transform-style: preserve-3d;
+}
+.method-flip-card.flipped .method-flip-inner { transform: rotateY(180deg); }
+.method-face {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 30px;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    padding: 32px;
+    overflow-y: auto;
+    backface-visibility: hidden;
+}
+.method-face::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 155px;
+    height: 105px;
+    background: var(--gradient-b);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    opacity: 0.9;
+    border-radius: 30px 0 0 0;
+    z-index: 0;
+}
+.method-face > * { position: relative; z-index: 1; }
+.method-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, #fff9dc 0%, #ffffff 58%);
+}
+.method-back::before { background: var(--gradient-a); }
+.method-face .content-image {
+    transform: none;
+    margin: 22px 0 24px;
+    box-shadow: none;
+    border-radius: 22px;
+}
+.method-face .content-image img { max-height: 320px; }
+
+/* Tables */
+.comp-table-wrapper {
+    overflow-x: auto;
+    margin: 32px 0;
+    border-radius: 28px;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+}
+.comp-table { width: 100%; border-collapse: collapse; text-align: left; background: #fff; min-width: 680px; }
+.comp-table th, .comp-table td { padding: 18px; border-bottom: 1px solid var(--color-border); }
+.comp-table th {
+    background: var(--gradient-a);
+    color: #fff;
+    font-family: var(--font-subheading);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tr:nth-child(even) { background-color: rgba(255,217,61,0.10); }
+.verdict-row { background: rgba(255,107,107,0.11) !important; font-weight: 800; }
+.verdict-row td { background: linear-gradient(90deg, rgba(255,107,107,0.18), rgba(255,142,83,0.08)); }
+.verdict-row td:nth-child(3),
+.verdict-row td:nth-child(4) {
+    background: var(--gradient-a);
+    color: #fff;
+}
+
+/* Premium SaaS Moment */
+.saas-band {
+    position: relative;
+    background:
+      radial-gradient(circle at 15% 16%, rgba(255,107,107,0.26), transparent 28%),
+      radial-gradient(circle at 84% 88%, rgba(78,205,196,0.22), transparent 30%),
+      var(--color-saas-bg);
+    color: var(--color-saas-text);
+    padding: 100px 0;
+    clip-path: polygon(0 0, 100% 7%, 100% 94%, 0 100%);
+    overflow: hidden;
+}
+.saas-band::before {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -100px;
+    width: 360px;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #FFD93D, #FF6B6B);
+    clip-path: polygon(50% 0, 100% 100%, 0 72%);
+    opacity: 0.42;
+    animation: triangleRotate 40s ease-in-out infinite alternate;
+}
+.saas-band h2, .saas-band h3 { color: #fff; }
+.saas-grid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr); gap: 56px; align-items: center; }
+.saas-chips { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+.chip {
+    background: rgba(255,255,255,0.11);
+    border: 1px solid rgba(255,255,255,0.16);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-secondary-accent);
+}
+.saas-ctas { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+.saas-btn-outline {
+    background: transparent;
+    border: 2px solid var(--color-secondary-accent);
+    color: var(--color-secondary-accent) !important;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: 900;
+}
+.saas-btn-outline:hover { background: var(--color-secondary-accent); color: #1A0533 !important; }
+.recommendation-visual {
+    position: relative;
+    display: grid;
+    gap: 18px;
+    align-items: center;
+}
+.product-stack {
+    display: grid;
+    grid-template-columns: 0.54fr 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 18px;
+    border-radius: 32px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+}
+.product-stack img {
+    width: 100%;
+    max-height: 390px;
+    object-fit: contain;
+    background: rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 24px;
+}
+.score-visual {
+    position: absolute;
+    right: -12px;
+    bottom: -22px;
+    width: 154px;
+    height: 154px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(26,5,51,0.82);
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.36);
+}
+.score-ring { width: 132px; height: 132px; transform: rotate(-90deg); }
+.score-bg, .score-progress { fill: none; stroke-width: 10; }
+.score-bg { stroke: rgba(255,255,255,0.12); }
+.score-progress {
+    stroke: url(#scoreGradient);
+    stroke-linecap: round;
+    stroke-dasharray: 301.6;
+    stroke-dashoffset: 301.6;
+    transition: stroke-dashoffset 1.4s ease-out;
+}
+.score-visual.is-visible .score-progress { stroke-dashoffset: calc(301.6 - (301.6 * 0.85)); }
+.score-number {
+    position: absolute;
+    font-family: var(--font-heading);
+    font-size: 30px;
+    color: #fff;
+    letter-spacing: -0.06em;
+}
+
+/* Feature and Pricing Cards */
+#defense-features .container-wide > div,
+#pricing-reference .container-wide > div {
+    align-items: stretch;
+}
+.feature-card,
+.pricing-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+.feature-card::after,
+.pricing-card::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 8px;
+    background: var(--gradient-a);
+    transition: height 0.35s ease;
+    z-index: 0;
+}
+.feature-card:nth-child(even)::after,
+.pricing-card:nth-child(even)::after { background: var(--gradient-b); }
+.feature-card:hover,
+.pricing-card:hover {
+    transform: translateY(-8px) rotate(-0.4deg);
+    box-shadow: 0 24px 64px rgba(26,5,51,0.16) !important;
+}
+.feature-card:hover::after,
+.pricing-card:hover::after { height: 30%; }
+.feature-card > *,
+.pricing-card > * { position: relative; z-index: 1; }
+.feature-card .content-image,
+.pricing-card .content-image {
+    margin: 0 0 20px;
+    padding: 10px;
+    transform: none;
+    box-shadow: none;
+    border-radius: 22px;
+}
+.feature-card .content-image img,
+.pricing-card .content-image img { max-height: 250px; }
+
+/* FAQ V7 - Numbered Scannable */
+.faq-item { margin-bottom: 32px; }
+.faq-question { display: flex; gap: 12px; align-items: baseline; font-family: var(--font-subheading); font-size: 1.125rem; font-weight: 900; color: var(--color-heading-text); margin-bottom: 12px; }
+.faq-q-prefix { color: var(--color-primary-accent); font-family: var(--font-heading); }
+.faq-answer { padding-left: 36px; }
+.troubleshooting-visual,
+.faq-visual { max-width: 640px; margin-left: auto; margin-right: auto; }
+
+/* Interactive: Backup Quiz */
+.quiz-card { background: #fff; padding: 32px; border-radius: 28px; border: 1px solid var(--color-border); margin: 32px 0; box-shadow: var(--shadow-card); }
+.quiz-question { margin-bottom: 24px; font-weight: 800; }
+.quiz-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.quiz-option { padding: 13px 16px; border: 1px solid var(--color-border); border-radius: 16px; cursor: pointer; transition: all 0.2s; background: #fff; }
+.quiz-option:hover, .quiz-option.selected { border-color: var(--color-primary-accent); background: rgba(255,107,107,0.08); }
+.quiz-result { display: none; padding: 16px; background: #fff7d1; border-radius: 16px; border-left: 6px solid var(--color-primary-accent); margin-top: 16px; }
+
+/* Interactive: Troubleshooting Flowchart */
+.flow-node { background: #fff; border: 1px solid var(--color-border); padding: 26px; border-radius: 28px; text-align: center; margin-bottom: 16px; box-shadow: var(--shadow-card); }
+.flow-actions { display: flex; justify-content: center; gap: 16px; margin-top: 16px; }
+.flow-btn { padding: 10px 18px; border: 2px solid var(--color-primary-accent); background: #fff; color: var(--color-primary-accent); border-radius: 999px; cursor: pointer; font-weight: 900; }
+.flow-btn:hover { background: var(--color-primary-accent); color: #fff; }
+
+/* Scroll entrance */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Footer */
+.site-footer {
+    background:
+      radial-gradient(circle at 0 0, rgba(255,107,107,0.25), transparent 28%),
+      radial-gradient(circle at 90% 100%, rgba(78,205,196,0.18), transparent 26%),
+      #120323 !important;
+    color: #fff;
+    padding: 70px 0 34px !important;
+    margin-top: 0 !important;
+    clip-path: polygon(0 6%, 100% 0, 100% 100%, 0 100%);
+}
+.site-footer h3,
+.site-footer h4 { color: #fff !important; text-transform: uppercase; }
+.site-footer a { color: rgba(255,255,255,0.82) !important; }
+.site-footer a:hover { color: var(--color-secondary-accent) !important; }
+.site-footer .footer-brand {
+    color: #fff !important;
+    font-size: 1.15rem !important;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .saas-grid { grid-template-columns: 1fr; }
+    .product-stack { grid-template-columns: 1fr; }
+    .score-visual { position: relative; right: auto; bottom: auto; margin: -6px auto 0; }
+}
+@media (max-width: 768px) {
+    :root { --section-padding-v: 64px; }
+    .section,
+    .section:nth-of-type(even),
+    .saas-band,
+    .site-footer {
+        clip-path: polygon(0 0, 100% 0, 100% 98.5%, 0 100%);
+    }
+    header { padding: 12px 18px; }
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: rgba(26, 5, 51, 0.98);
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+        padding: 24px;
+    }
+    .nav-links.active { display: flex; }
+    .mobile-toggle { display: block; }
+    .hero-editorial { padding: 68px 0 54px; }
+    .hero-editorial::before,
+    .hero-editorial::after { width: 64vw; }
+    .hero-editorial h1 { font-size: clamp(38px, 12vw, 44px); }
+    .toc-card ul { columns: 1; }
+    .sim-tabs { flex-direction: column; }
+    .method-flip-card,
+    .method-flip-inner { min-height: auto; }
+    .method-flip-inner {
+        transform: none !important;
+        display: grid;
+        gap: 16px;
+    }
+    .method-face {
+        position: relative;
+        inset: auto;
+        transform: none !important;
+        backface-visibility: visible;
+        max-height: 420px;
+        overflow: hidden;
+        transition: max-height 0.45s ease;
+    }
+    .method-flip-card.flipped .method-face { max-height: 1000px; }
+    .toggle-wrapper { display: flex; flex-direction: column; align-items: stretch; }
+    .content-image { transform: none !important; padding: 10px; }
+    .saas-ctas { flex-direction: column; align-items: stretch; }
+    .saas-ctas a { text-align: center; }
+    .brand-wordmark { max-width: 230px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+</style>
+</head>
+<body>
+<header>
+<div class="nav-container">
+<a class="site-brand" href="/">
+<span aria-hidden="true" class="brand-mark">
+<svg focusable="false" role="img" viewbox="0 0 48 48">
+<path class="mark-shield" d="M24 4 40 10v11c0 11.2-6.6 18.8-16 23-9.4-4.2-16-11.8-16-23V10L24 4Z"></path>
+<path class="mark-cut" d="M24 11v25M16 22h16"></path>
+</svg>
+</span>
+<span aria-label="Ransomware Defense Hub" class="brand-wordmark">Ransomware Defense Hub</span>
+</a>
+<button aria-label="Toggle Menu" class="mobile-toggle">☰</button>
+<nav class="nav-links">
+<a href="#overview">Overview</a>
+<a href="#methods">Defense Methods</a>
+<a href="#recommendation">Top Pick</a>
+<a href="#troubleshooting">Troubleshooting</a>
+<a href="#faq">FAQ</a>
+<a class="btn-outline" href="#recommendation">See Our Top Pick →</a>
+</nav>
+</div>
+</header>
+<!-- S1: HERO EDITORIAL -->
+<section class="hero-editorial">
+<div class="container-reading">
+<span class="breadcrumb">Cybersecurity Guides / File Protection</span>
+<h1>How to Protect Your Folders and Files from Ransomware Attacks</h1>
+<p class="hero-intro">Ransomware doesn't just target enterprise servers—personal PCs are frequently hit by cryptolockers looking to hold personal documents and photos hostage. Here is exactly how to lock down your folders.</p>
+<div class="meta-bar">
+<span>By the Editorial Team</span>
+<span>•</span>
+<span>Updated May 2026</span>
+<span>•</span>
+<span>12 min read</span>
+</div>
+<div class="quick-answer">
+<span class="label">Quick Answer</span>
+<p>To protect specific folders from ransomware, enable <strong><a href="https://www.avast.com/c-password-protect-file-folder-windows" rel="noopener noreferrer" target="_blank">Windows Controlled Folder Access</a></strong> via Windows Security for native baseline defense. For stronger, isolated protection, use dedicated endpoint security or folder-locking software that blocks unauthorized application access entirely. Always pair access controls with an offline or immutable backup strategy.</p>
+</div><figure class="content-image hero-visual"><img alt="Folder Lock ransomware protection promotional banner for secure file and folder defense" decoding="async" loading="lazy" src="https://i.ibb.co/C3dwdr7Z/folder-lock-10-promotional-poster-newsoftwares.jpg"/></figure>
+<div aria-hidden="true" class="scroll-indicator"><span>⌄</span></div></div>
+</section>
+<!-- S2: TABLE OF CONTENTS -->
+<section class="section">
+<div class="container-reading">
+<div class="toc-card">
+<h3>Inside this guide</h3>
+<ul>
+<li><a href="#overview">How Ransomware Encrypts Your Files — Explained</a></li>
+<li><a href="#requirements">What You Need Before Starting</a></li>
+<li><a href="#methods">Method 1: Windows Controlled Folder Access (Free)</a></li>
+<li><a href="#recommendation">Method 2: Dedicated Anti-Ransomware Folder Protection</a></li>
+<li><a href="#comparison">Ransomware Protection Method Comparison</a></li>
+<li><a href="#troubleshooting">Troubleshooting &amp; Recovery Flowchart</a></li>
+<li><a href="#faq">Common Questions (FAQ)</a></li>
+</ul>
+</div>
+<h2 id="overview">How Ransomware Encrypts Your Files — Explained</h2>
+<p>Ransomware is a type of malicious software that silently infiltrates your system, locates your sensitive files, and encrypts them using <a href="https://psbios.com/file-encryption-explained/" rel="noopener noreferrer" target="_blank">complex cryptographic algorithms</a>. Once the files are locked, a ransom demand is displayed, requiring payment (usually in cryptocurrency) in exchange for the decryption key.</p>
+<p>Unlike standard viruses that corrupt data, modern encryption ransomware (like Cryptolocker variants) leaves the operating system functional but holds the user's specific folders—documents, databases, and photos—hostage.</p><figure class="content-image overview-visual"><img alt="Security monitoring dashboard showing unauthorized file access attempts blocked before encryption" decoding="async" loading="lazy" src="https://i.ibb.co/DPBbtBCG/Monitoring-Attempts.jpg"/></figure>
+<!-- Interactive S4: Attack Chain Diagram -->
+<div class="sim-container">
+<div class="sim-tabs">
+<button class="sim-tab active" data-target="stage1">Stage 1: Infection</button>
+<button class="sim-tab" data-target="stage2">Stage 2: Execution</button>
+<button class="sim-tab" data-target="stage3">Stage 3: Encryption</button>
+</div>
+<div class="sim-content active" id="stage1">
+<h4>The Initial Breach</h4>
+<p>The attack usually begins with a phishing email, a malicious download, or an unpatched browser vulnerability. The malware drops a payload onto the system without triggering traditional, outdated signature-based antivirus alerts.</p>
+</div>
+<div class="sim-content" id="stage2">
+<h4>Discovery and Execution</h4>
+<p>The ransomware scans the local drives and connected network shares for high-value targets. It specifically maps out <code>.docx</code>, <code>.pdf</code>, <code>.jpg</code>, and database files, preparing to bypass standard user permissions.</p>
+</div>
+<div class="sim-content" id="stage3">
+<h4>The Lockdown</h4>
+<p>Using military-grade encryption (like AES-256), the ransomware converts readable data into scrambled ciphertext. The original files are deleted, leaving only the encrypted versions and a <code>readme.txt</code> ransom note behind.</p>
+</div>
+</div>
+<h3 id="requirements">What You Need Before Starting</h3>
+<p>Before implementing folder protection, ensure you have:</p>
+<ul>
+<li>Administrative access to your Windows or Mac computer.</li>
+<li>An updated operating system (Windows 10/11 or macOS).</li>
+<li>A clean system state (run a full anti-malware scan first to ensure you aren't locking a folder that is already compromised).</li>
+</ul><figure class="content-image requirements-visual"><img alt="Windows security tools interface for ransomware and folder protection settings" decoding="async" loading="lazy" src="https://i.ibb.co/84gBFQ3x/windows-security-tools-microsoft-defender-and-built-in-features.jpg"/></figure>
+</div>
+</section>
+<!-- S6 & S7: METHODS GUIDE (Using Signature Detail Toggle) -->
+<section class="section section-alt" id="methods">
+<div class="container-reading">
+<h2>How to Protect Your Folders from Ransomware</h2>
+<p>There are two primary ways to lock down your folders. You can use native OS tools to create permission barriers, or you can use dedicated security software to isolate the files entirely. Choose the approach below to view the steps.</p>
+<!-- Signature Detail: Inline Toggle -->
+<div class="toggle-wrapper" id="method-toggle">
+<button class="toggle-btn active" data-method="native">Method 1: Windows Built-in</button>
+<button class="toggle-btn" data-method="software">Method 2: Dedicated Software</button>
+</div>
+<div class="method-flip-card" id="method-native" style="display: block;" tabindex="0"><div class="method-flip-inner"><div class="method-face method-front"><h3>Windows Controlled Folder Access — Setup Guide</h3><p>Windows 10 and 11 include a built-in feature called Controlled Folder Access. When enabled, it monitors the apps that attempt to modify files in protected folders. If an unknown or malicious app (like ransomware) tries to change the files, it is blocked.</p><figure class="content-image method-native-visual"><img alt="Windows File Explorer folders prepared for controlled folder access protection" decoding="async" loading="lazy" src="https://i.ibb.co/35v0S8cp/Windows-file-explorer.jpg"/></figure><ol>
+<li>Open the <strong>Windows Security</strong> app by searching for it in the Start menu.</li>
+<li>Click on <strong>Virus &amp; threat protection</strong>.</li>
+<li>Scroll down to <strong>Ransomware protection</strong> and click <em>Manage ransomware protection</em>.</li>
+<li>Toggle <strong>Controlled folder access</strong> to <em>On</em>.</li>
+<li>Click <em>Protected folders</em> to add any custom directories (like an external hard drive or a shared network folder) that you want to secure.</li>
+</ol></div><div class="method-face method-back"><div style="background: rgba(139, 74, 54, 0.08); padding: 16px; border-left: 3px solid #8b4a36; margin-top: 24px;">
+<strong>Limitations of this method:</strong> While free and built-in, Controlled Folder Access is known for generating high rates of "false positives"—blocking legitimate applications (like games or video editors) from saving files. You will have to manually whitelist trusted apps frequently.
+                </div></div></div></div>
+<div class="method-flip-card" id="method-software" style="display: none;" tabindex="0"><div class="method-flip-inner"><div class="method-face method-front"><h3>Dedicated Anti-Ransomware Folder Protection</h3><p>For users who require impenetrable security without the constant false positives of native OS tools, <a href="https://nira.com/best-encryption-software/" rel="noopener noreferrer" target="_blank">dedicated endpoint protection</a> is the professional standard. Advanced solutions do not just ask the operating system for permission; they operate beneath it.</p><figure class="content-image method-software-visual"><img alt="Folder Lock protect folders screen for securing sensitive directories from ransomware" decoding="async" loading="lazy" src="https://i.ibb.co/czvrxyF/folder-lock-10-screenshot-safeguard-protect-folders.png"/></figure></div><div class="method-face method-back"><p>By utilizing military-grade AES 256-bit cryptography and establishing kernel-level filter drivers, these applications render your directories entirely invisible to the file system. Even if a sophisticated ransomware variant forces your machine to reboot into Safe Mode to bypass standard antivirus protocols, the secured directories remain completely undetectable and locked.</p><ol>
+<li>Install a reputable, <a href="https://www.techradar.com/best/best-encryption-software" rel="noopener noreferrer" target="_blank">dedicated encryption application</a>.</li>
+<li>Establish a master authentication key. <em>(Note: True zero-knowledge security tools do not possess backdoors. If you forget this master key, the developer cannot recover your data).</em></li>
+<li>Move the folders you wish to isolate into the application's secure virtual drive interface.</li>
+<li>Engage the lockdown protocol. The files are instantly encrypted on-the-fly, converting readable data into complex ciphertext that malicious scripts cannot parse, copy, or ransom.</li>
+</ol></div></div></div>
+</div>
+</section>
+<!-- S8: COMPARISON TABLE (V1) -->
+<section class="section" id="comparison">
+<div class="container-wide">
+<h2 style="text-align: center; margin-bottom: 40px;">Ransomware Protection Method Comparison</h2>
+<div class="comp-table-wrapper">
+<table class="comp-table">
+<thead>
+<tr>
+<th>Defense Method</th>
+<th>Difficulty</th>
+<th>Security Level</th>
+<th>Best For</th>
+<th>Limitations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basic Antivirus</td>
+<td>Low</td>
+<td>Moderate</td>
+<td>General web browsing safety</td>
+<td>Struggles with zero-day encryption malware; relies on known signatures.</td>
+</tr>
+<tr>
+<td>Windows Controlled Folder Access</td>
+<td>Medium</td>
+<td>High</td>
+<td>Free baseline protection</td>
+<td>High false-positive rate; requires constant manual whitelisting of apps.</td>
+</tr>
+<tr>
+<td>Offline / Immutable Backups</td>
+<td>High</td>
+<td>Very High</td>
+<td>Disaster recovery (3-2-1 rule)</td>
+<td>Does not prevent the attack; only aids in recovery after the fact.</td>
+</tr>
+<tr class="verdict-row">
+<td>Dedicated Folder Locking Software</td>
+<td>Low</td>
+<td>Highest</td>
+<td>Targeted protection for sensitive data</td>
+<td>Requires third-party software installation; master password cannot be lost.</td>
+</tr>
+</tbody>
+</table>
+</div><figure class="content-image comparison-visual"><img alt="Windows encryption software comparison visual for file and folder security" decoding="async" loading="lazy" src="https://i.ibb.co/K149f6r/best-windows-encryption-software.jpg"/></figure>
+</div>
+</section>
+<!-- S9: PREMIUM SAAS MOMENT (Layer 2 Transition) -->
+<section class="saas-band" id="recommendation">
+<div class="container-wide">
+<div class="saas-grid">
+<div>
+<h2>The Tool We Recommend for Most Users</h2>
+<p style="color: rgba(255,255,255,0.8); font-size: 1.125rem; margin-bottom: 24px;">Of all the options we covered, built-in OS tools often prove too frustrating for daily use due to false alarms. If you need robust, reliable folder protection against ransomware without the headache, we recommend <a href="https://cloudstorageinfo.org/folder-lock-review" rel="noopener noreferrer" target="_blank"><strong>Folder Lock</strong></a>.</p>
+<p style="color: rgba(255,255,255,0.8); margin-bottom: 24px;">Folder Lock uses advanced kernel-level protection to instantly lock, hide, and encrypt your sensitive files. Because it operates beneath the standard Windows and macOS permission structures, ransomware scripts cannot view, copy, or encrypt the locked directories. With over a hundred million global deployments spanning two decades, it has established itself as a baseline defense for individuals and enterprise networks alike. It is engineered with a strict zero-knowledge architecture—meaning there are absolutely no hidden backdoors.</p>
+<div class="saas-chips">
+<span class="chip">256-bit AES Encryption</span>
+<span class="chip">Safe Mode Concealment</span>
+<span class="chip">Zero-Knowledge Architecture</span>
+</div>
+<div class="saas-ctas">
+<a class="btn-filled" href="https://www.newsoftwares.net/download/folderlock10-en/folder-lock-en.exe" rel="noopener noreferrer" target="_blank">Try Folder Lock Free →</a>
+<a class="saas-btn-outline" href="https://store.newsoftwares.net/?add=fl10" rel="noopener noreferrer" target="_blank">Get the Full Version →</a>
+</div>
+</div>
+<div>
+<div class="recommendation-visual">
+<div class="product-stack">
+<img alt="Folder Lock 10 product boxshot for ransomware-safe file encryption" decoding="async" loading="lazy" src="https://i.ibb.co/V0Sw4tk7/folder-lock-10-boxshot.png"/>
+<img alt="Folder Lock 10 main dashboard showing encrypted lockers and secure data controls" decoding="async" loading="lazy" src="https://i.ibb.co/ynCZTHt1/folder-lock-10-main-screen.png"/>
+</div>
+<div aria-label="Protection score 85 percent" class="score-visual" data-score="85">
+<svg aria-hidden="true" class="score-ring" role="img" viewbox="0 0 120 120">
+<defs>
+<lineargradient id="scoreGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#FF6B6B"></stop>
+<stop offset="100%" stop-color="#FF8E53"></stop>
+</lineargradient>
+</defs>
+<circle class="score-bg" cx="60" cy="60" r="48"></circle>
+<circle class="score-progress" cx="60" cy="60" r="48"></circle>
+</svg>
+<span class="score-number">85%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- NEW SECTION: CORE DEFENSE CAPABILITIES -->
+<section class="section" id="defense-features">
+<div class="container-reading">
+<h2>Advanced Ransomware Defense Layers</h2>
+<p>Beyond simple password protection, comprehensive encryption suites provide overlapping layers of security designed to neutralize the specific tactics used by modern cryptolockers.</p>
+<div style="margin-top: 32px; display: grid; gap: 24px;">
+<div class="feature-card" style="padding: 24px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: #fff;">
+<figure class="content-image cloud-feature-visual"><img alt="Secure cloud ecosystem illustrating encrypted backup protection against ransomware sync damage" decoding="async" loading="lazy" src="https://i.ibb.co/WvhfWD26/Secured-Cloud-Ecosystem.jpg"/></figure><h3 style="font-size: 1.125rem; margin-bottom: 8px;">Client-Side Cloud Shielding</h3>
+<p style="margin-bottom: 0;">Standard cloud drives (like OneDrive or Dropbox) immediately sync whatever happens on your local machine. If ransomware encrypts your local folder, the corrupted files are instantly mirrored to the cloud, destroying your backups. By utilizing local, on-the-fly encryption <em>before</em> the data ever reaches the cloud server, you ensure that only impenetrable ciphertext is synchronized. If an attack occurs, your <a href="https://www.windowscentral.com/how-encrypt-data-storing-it-cloud-and-why-you-should" rel="noopener noreferrer" target="_blank">cloud backup</a> remains safe and inaccessible to the malware.</p>
+</div>
+<div class="feature-card" style="padding: 24px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: #fff;">
+<figure class="content-image usb-feature-visual"><img alt="Secure virtual drive concept for portable air-gapped ransomware recovery vaults" decoding="async" loading="lazy" src="https://i.ibb.co/q3LHT6Kb/Secure-Virtual-Drive.jpg"/></figure><h3 style="font-size: 1.125rem; margin-bottom: 8px;">Air-Gapped Portable Vaults</h3>
+<p style="margin-bottom: 0;">The ultimate defense against network-based ransomware is offline, air-gapped storage. Advanced tools allow you to convert your secured folders into self-contained, executable archives on <a href="https://windowsreport.com/encrypt-usb-flash-drive-windows/" rel="noopener noreferrer" target="_blank">external USB drives</a>. These isolated vaults do not require the host software to be installed on the recovery machine, making them the perfect failsafe for disaster recovery following a total system wipe.</p>
+</div>
+<div class="feature-card" style="padding: 24px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: #fff;">
+<figure class="content-image shred-feature-visual"><img alt="Folder Lock file shredder screen for permanent secure deletion of sensitive files" decoding="async" loading="lazy" src="https://i.ibb.co/Ndh0Qc8T/folder-lock-10-screenshot-safeguard-shred-files.png"/></figure><h3 style="font-size: 1.125rem; margin-bottom: 8px;">Forensic Data Destruction</h3>
+<p style="margin-bottom: 0;">A common ransomware tactic involves making a copy of your file, encrypting the copy, and then using standard Windows deletion on the original. Sophisticated attackers can sometimes recover those original deleted files. To prevent this, integrated forensic shredding—utilizing multi-pass overwrite protocols matching Department of Defense standards—permanently obliterates the unencrypted originals from your hard drive sectors.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- NEW SECTION: FREE VS PAID -->
+<section class="section section-alt" id="pricing-reference" style="border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+<div class="container-reading">
+<h2>Folder Lock: Free vs. Full Version</h2>
+<p>If you choose to implement our recommended tool, it is available in two tiers depending on your data volume requirements.</p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px;">
+<div class="pricing-card" style="background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 32px;">
+<figure class="content-image pricing_free-visual"><img alt="Folder Lock free version product box for basic file protection" decoding="async" loading="lazy" src="https://i.ibb.co/0j6YwkVB/fl-boxshot-high-res-2.png"/></figure><h3 style="margin-bottom: 16px;">The Free Version</h3>
+<ul style="list-style: none; padding: 0;">
+<li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--color-primary-accent);">✓</span> Protect up to 1 Gigabyte of data</li>
+<li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--color-primary-accent);">✓</span> Synchronize across 2 personal devices</li>
+<li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--color-primary-accent);">✓</span> Local desktop and cloud locker support</li>
+<li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--color-primary-accent);">✓</span> Cross-platform mobile app access</li>
+</ul>
+</div>
+<div class="pricing-card" style="background: #fff; border: 2px solid var(--color-primary-accent); border-radius: var(--radius-card); padding: 32px; position: relative;">
+<span style="position: absolute; top: -12px; left: 24px; background: var(--color-primary-accent); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 1px;">FULL PROTECTION</span>
+<figure class="content-image pricing_pro-visual"><img alt="Folder Lock 10 Pro product box for unlimited encrypted storage protection" decoding="async" loading="lazy" src="https://i.ibb.co/ksHyHDQV/folder-lock-10-pro-boxshot.png"/></figure><h3 style="margin-bottom: 16px;">The Pro License</h3>
+<ul style="list-style: none; padding: 0;">
+<li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--color-primary-accent);">✓</span> <strong>Unlimited</strong> encrypted storage capacity</li>
+<li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--color-primary-accent);">✓</span> Synchronize across up to 5 endpoints</li>
+<li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--color-primary-accent);">✓</span> 4096-bit RSA secure file sharing</li>
+<li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="color: var(--color-primary-accent);">✓</span> Create bootable portable USB lockers</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- S10: TROUBLESHOOTING / RECOVERY (Interactive Flowchart & Quiz) -->
+<section class="section" id="troubleshooting">
+<section class="section" id="faq">
+<div class="container-reading">
+<h2>Common Questions About Folder Protection</h2><figure class="content-image faq-visual"><img alt="Cybersecurity shield protecting files and personal data from ransomware threats" decoding="async" loading="lazy" src="https://i.ibb.co/bjywWFhL/security-shield-protecting.jpg"/></figure><figure class="content-image troubleshooting-visual"><img alt="Shielded computer monitor representing troubleshooting and recovery from ransomware attacks" decoding="async" loading="lazy" src="https://i.ibb.co/Fbk2d84w/Shielded-Monitor.jpg"/></figure>
+<div class="faq-item">
+<div class="faq-question">
+<span class="faq-q-prefix">Q1.</span> Does antivirus protect against ransomware?
+                </div>
+<div class="faq-answer">
+                    Traditional antivirus software provides baseline protection by scanning for known malware signatures. However, modern ransomware mutates rapidly (zero-day threats). Therefore, standard antivirus is often not enough on its own; dedicated anti-ransomware behavioral monitoring or folder-isolation tools are required.
+                </div>
+</div>
+<div class="faq-item">
+<div class="faq-question">
+<span class="faq-q-prefix">Q2.</span> Does BitLocker protect against ransomware?
+                </div>
+<div class="faq-answer">
+                    No. BitLocker is full-disk encryption designed to protect your data if your physical laptop is stolen while powered off. When your computer is on and you are logged in, BitLocker unlocks the drive for use. If ransomware executes while the computer is running, it has full access to encrypt your files, regardless of BitLocker.
+                </div>
+</div>
+<div class="faq-item">
+<div class="faq-question">
+<span class="faq-q-prefix">Q3.</span> Does OneDrive protect against ransomware?
+                </div>
+<div class="faq-answer">
+                    OneDrive offers some mitigation, not direct prevention. If ransomware encrypts your local OneDrive folder, those encrypted changes will sync to the cloud. However, Microsoft 365 provides a "Files Restore" feature that allows you to roll back your entire OneDrive to a previous point in time before the attack occurred.
+                </div>
+</div>
+<div class="faq-item">
+<div class="faq-question">
+<span class="faq-q-prefix">Q4.</span> How does ransomware encrypt files?
+                </div>
+<div class="faq-answer">
+                    Ransomware utilizes strong asymmetric or symmetric cryptography (like AES or RSA). It generates a unique encryption key, systematically opens your documents, scrambles the data using the key, saves the encrypted version, and deletes the original readable file. The decryption key is held on the attacker's remote server.
+                </div>
+</div>
+<div class="faq-item">
+<div class="faq-question">
+<span class="faq-q-prefix">Q5.</span> How to decrypt files encrypted by ransomware?
+                </div>
+<div class="faq-answer">
+                    You cannot reliably decrypt files using CMD or built-in tools without the attacker's key. Your best options are restoring from an offline backup, using Windows Shadow Copies (if the malware failed to delete them), or checking cybersecurity alliance websites for released decryption tools for older ransomware variants.
+                </div>
+</div>
+<div class="faq-item">
+<div class="faq-question">
+<span class="faq-q-prefix">Q6.</span> iPhone files password protect folder—does this help?
+                </div>
+<div class="faq-answer">
+                    Mobile operating systems like iOS are highly sandboxed, making traditional ransomware rare. Using the native hidden/locked folder features on iOS protects your files from physical snooping, but it is less about preventing remote encryption malware and more about local privacy.
+                </div>
+</div>
+</div>
+</section>
+<!-- S21 & S22: RELATED & FOOTER -->
+<footer class="site-footer" style="background-color: var(--color-heading-text); color: #fff; padding: 64px 0 32px; margin-top: 48px;">
+<div class="container-wide">
+<div style="display: flex; flex-wrap: wrap; gap: 48px; margin-bottom: 48px;">
+<div style="flex: 1; min-width: 250px;">
+<h3 class="footer-brand" style="color: #fff; font-size: 1.25rem;">
+<span aria-hidden="true" class="brand-mark">
+<svg focusable="false" role="img" viewbox="0 0 48 48">
+<path class="mark-shield" d="M24 4 40 10v11c0 11.2-6.6 18.8-16 23-9.4-4.2-16-11.8-16-23V10L24 4Z"></path>
+<path class="mark-cut" d="M24 11v25M16 22h16"></path>
+</svg>
+</span>
+<span aria-label="Ransomware Defense Hub" class="brand-wordmark">Ransomware Defense Hub</span>
+</h3>
+<p style="color: rgba(255,255,255,0.6); font-size: 14px;">The complete guide to how to protect your folder from ransomware.</p>
+</div>
+<div style="flex: 1; min-width: 200px;">
+<h4 style="color: #fff; font-size: 1rem; margin-bottom: 16px;">Related Products</h4>
+<ul style="list-style: none; padding: 0;">
+<li><a href="https://newsoftwares.net/" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); font-size: 14px;" target="_blank">Folder Lock</a></li>
+<li><a href="https://www.softlay.com/downloads/usb-secure" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); font-size: 14px;" target="_blank">USB Secure</a></li>
+<li><a href="https://www.24-7pressrelease.com/press-release/435143/newsoftwaresnet-releases-a-cloud-secure-password-protection-for-all-cloud-platforms" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); font-size: 14px;" target="_blank">Cloud Secure</a></li>
+<li><a href="https://store.newsoftwares.net/?add=cp" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); font-size: 14px;" target="_blank">Copy Protect</a></li>
+</ul>
+</div>
+<div style="flex: 1; min-width: 200px;">
+<h4 style="color: #fff; font-size: 1rem; margin-bottom: 16px;">Legal</h4>
+<ul style="list-style: none; padding: 0;">
+<li><span style="color: rgba(255,255,255,0.8); font-size: 14px;">Privacy Policy</span></li>
+<li><span style="color: rgba(255,255,255,0.8); font-size: 14px;">Terms of Use</span></li>
+</ul>
+</div>
+</div>
+<div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; font-size: 13px; color: rgba(255,255,255,0.5);">
+<p style="margin-bottom: 8px;">This site operates as an independent editorial resource. Some links may earn a referral commission at no cost to you. Product recommendations reflect editorial judgment and independent assessment.</p>
+<p style="margin-bottom: 8px;">Folder Lock is developed by <a href="https://www.newsoftwares.net" rel="noopener noreferrer" style="color: var(--color-hero-bg);" target="_blank">NewSoftwares.net</a>.</p>
+<p>© 2026 Ransomware Defense Hub. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<!-- Scripts -->
+<script defer="">
+document.addEventListener('DOMContentLoaded', () => {
+    // Mobile Menu Toggle
+    const toggleBtn = document.querySelector('.mobile-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (toggleBtn && navLinks) {
+        toggleBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
+
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const targetEl = document.querySelector(this.getAttribute('href'));
+            if (!targetEl) return;
+            e.preventDefault();
+            if (navLinks && navLinks.classList.contains('active')) navLinks.classList.remove('active');
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Interactive: Attack Simulation Tabs
+    const tabs = document.querySelectorAll('.sim-tab');
+    const contents = document.querySelectorAll('.sim-content');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            const pane = document.getElementById(tab.dataset.target);
+            if (pane) pane.classList.add('active');
+        });
+    });
+
+    // Signature Detail: Inline Toggle
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const target = btn.dataset.method;
+            const native = document.getElementById('method-native');
+            const software = document.getElementById('method-software');
+            if (!native || !software) return;
+            native.classList.remove('flipped');
+            software.classList.remove('flipped');
+            if (target === 'native') {
+                native.style.display = 'block';
+                software.style.display = 'none';
+            } else {
+                native.style.display = 'none';
+                software.style.display = 'block';
+            }
+        });
+    });
+
+    // Method cards: click/keyboard flip, mobile tap expands.
+    document.querySelectorAll('.method-flip-card').forEach(card => {
+        const flip = () => card.classList.toggle('flipped');
+        card.addEventListener('click', (event) => {
+            if (event.target.closest('a, button')) return;
+            flip();
+        });
+        card.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                flip();
+            }
+        });
+    });
+
+    // Section entrance: H2 and first paragraph fade up on scroll.
+    document.querySelectorAll('section').forEach(section => {
+        const h2 = section.querySelector('h2');
+        const firstP = h2 ? h2.parentElement.querySelector('p') : null;
+        [h2, firstP].forEach(el => {
+            if (el) el.classList.add('reveal-on-scroll');
+        });
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
+
+    // Signature Detail: Protection score dial.
+    const score = document.querySelector('.score-visual');
+    if (score) {
+        const scoreObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    score.classList.add('is-visible');
+                    scoreObserver.unobserve(score);
+                }
+            });
+        }, { threshold: 0.45 });
+        scoreObserver.observe(score);
+    }
+
+    // Interactive: Backup Quiz
+    const quizOptions = document.querySelectorAll('.quiz-option');
+    const quizResult = document.getElementById('quiz-result');
+    quizOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+            if (!quizResult) return;
+            quizOptions.forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            const score = opt.dataset.score;
+            quizResult.style.display = 'block';
+            if (score === '1') {
+                quizResult.innerHTML = "<strong>High Risk:</strong> Without off-site or offline backups, a ransomware attack will result in total data loss.";
+            } else if (score === '2') {
+                quizResult.innerHTML = "<strong>Moderate Risk:</strong> Cloud syncing is convenient, but ransomware can encrypt your local files and sync the corrupted versions to the cloud instantly.";
+            } else {
+                quizResult.innerHTML = "<strong>Low Risk:</strong> Excellent! Maintaining an offline backup (the 3-2-1 rule) is the ultimate failsafe against ransomware.";
+            }
+        });
+    });
+});
+
+// Flowchart Logic
+function flowNext(targetId) {
+    document.querySelectorAll('.flow-node').forEach(node => {
+        node.style.display = 'none';
+    });
+    const target = document.getElementById(targetId);
+    if (target) target.style.display = 'block';
+}
+function flowRestart() {
+    document.querySelectorAll('.flow-node').forEach(node => {
+        node.style.display = 'none';
+    });
+    const start = document.getElementById('node-start');
+    if (start) start.style.display = 'block';
+}
+</script>
+<!-- Schema -->
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "name": "How to Protect Your Folders and Files from Ransomware Attacks",
+          "description": "Learn how to protect your folders from ransomware encryption. A complete guide to Windows Controlled Folder Access, anti-ransomware software, and file recovery."
+        },
+        {
+          "@type": "Article",
+          "headline": "How to Protect Your Folders and Files from Ransomware Attacks",
+          "author": {
+            "@type": "Organization",
+            "name": "Editorial Team"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "NewSoftwares.net"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Cybersecurity Guides"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "File Protection"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "How to Protect Your Folder from Ransomware"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Does antivirus protect against ransomware?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Traditional antivirus software provides baseline protection by scanning for known malware signatures. However, modern ransomware mutates rapidly. Standard antivirus is often not enough on its own; dedicated folder-isolation tools are required."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does BitLocker protect against ransomware?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. BitLocker is full-disk encryption designed to protect your data if your laptop is stolen while powered off. If ransomware executes while the computer is running, it has full access to encrypt your files."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does OneDrive protect against ransomware?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "OneDrive offers mitigation, not direct prevention. If ransomware encrypts your local folder, those changes sync to the cloud. Microsoft 365 offers a Files Restore feature to roll back the OneDrive state."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does ransomware encrypt files?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Ransomware utilizes strong cryptography. It generates a unique key, scrambles the data, saves the encrypted version, and deletes the original readable file."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How to decrypt files encrypted by ransomware?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You cannot reliably decrypt files without the attacker's key. Your best options are restoring from an offline backup or checking cybersecurity alliance websites for released decryption tools."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</section></body>
+</html>
