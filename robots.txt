@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stevefrankns.github.io/Protect-Folders-and-Files-from-Ransomware-Attacks/sitemap.xml
